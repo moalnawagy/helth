@@ -9,7 +9,7 @@ def add_new_hospital(list_of_data, lista_of_planes):
     H_id = db(f"""SELECT H_id from hospital WHERE H_name = '{hospital_name}'""")
     for my_plane in lista_of_planes:
       db(f'''INSERT INTO hospital_planes VALUES({H_id[0][0]}, {my_plane}); ''')
-    return "successfuly done"
+    return "successfuly"
 
 
 # add_new_hospital(["almenshamwy", "002010457118", "algeesh st", "almenshawy@hospital.com", "www.almenshawy.com"],[1, 2])
