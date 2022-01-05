@@ -6,6 +6,8 @@ from veiw_claims import get_all_claims, get_uresolved_claims
 from get_claim_details import get_claim_details
 from mark_claim import mark_claim
 from get_customer_id import get_customer_id
+from file_claim import file_claim
+from payments import get_payments, verify_payment
 from core.db.db import db
 myApp = Flask(__name__)
 
@@ -40,7 +42,6 @@ def add_customer():
 
 @myApp.route("/submit_add_new_customer", methods = ['GET','POST'])
 def submit_add_new_customer():
-    print(request.form.get('gender'))
     adding = add_new_customer_core(request.form['ssn'],request.form['name'], request.form['birth_date'], request.form.get('gender'),
      request.form['income'], request.form['address'], request.form['phone'], request.form['has_chronic_dis'], request.form['tall'], request.form['weight'], request.form['email'], request.form.get('plane') )
     if(adding == "successfuly"):
@@ -48,8 +49,9 @@ def submit_add_new_customer():
     else:
         return render_template("failed.html", redirect = url_for('home'))
 
+
 @myApp.route("/file_claim")
-def file_claim():
+def file():
     data = db('select H_id,H_name from hospital')
     return render_template("file_claim.html", data=data)
 
@@ -62,10 +64,7 @@ def submit_file_claim():
     dependant = request.form.get('dependant')
     hospital= request.form.get('hospital')
 
-    id = get_customer_id(ssn)
-    db(f'''INSERT INTO insurance_claim (amount, date, description, mainly_for,hospital)  
-                                VALUES({amount},"{date}","{description}",{id},{hospital});''')
-    print("done")
+    adding = file_claim([amount, date, description, ssn, dependant, hospital])
     return render_template("successful.html", redirect = url_for('home'))
 
 @myApp.route("/add_depndant")
@@ -74,7 +73,9 @@ def add_depndant():
 
 @myApp.route("/submit_add_new_dependent", methods = ['GET','POST'])
 def submit_add_new_dependent():
-    adding = add_dependent_core(request.form['ssn'],request.form['name'], request.form['birth_date'],request.form.get('plane'))
+    ssn = request.form['ssn']
+    id = get_customer_id(ssn)
+    adding = add_dependent_core(id,request.form['name'], request.form['birth_date'],request.form.get('plane'))
     if(adding == "successfuly"):
         return render_template("successful.html", redirect = url_for('home'))
     else:
@@ -118,7 +119,6 @@ def view_s_claims(IC_id):
     data = get_claim_details(IC_id)
     for s in data:
         data[0] = str(data[0])
-    print(data)
     return render_template("view_s_claims.html", data = data)
 
 @myApp.route("/accept_claim_<IC_id>")
@@ -130,5 +130,17 @@ def accept_claim(IC_id):
 def refuse_claim(IC_id):
     data = mark_claim(False,IC_id)
     return redirect(url_for('view_all_claims'))
+
+@myApp.route("/payments")
+def view_payments():
+    data = get_payments()
+    
+    return render_template("payments.html", data = data)
+
+@myApp.route("/verify_payment_<P_id>")
+def verify_payments(P_id):
+    verify_payment(P_id)
+    return redirect(url_for('view_payments'))
+
 if __name__ == "__main__":
     myApp.run(debug=True)

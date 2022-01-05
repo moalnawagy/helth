@@ -9,12 +9,12 @@ def file_claim(list_of_data):
     C_id = get_customer_id(mainly_for)
     dependent = list_of_data[4]
     hospital = list_of_data[5]
-    hospital_id = db(f'''SELECT H_ID FROM hospital WHERE H_name LIKE "%{hospital}%"''')[0][0]
-    if dependent ==0:
-        db(f'''INSERT INTO insurance_claim (amount, date, description, mainly_for, hospital) VALUES ({amount}, "{date}", "{descreption}", {C_id},{hospital_id} );''')
+    print(dependent)
+    if dependent =="":
+        db(f'''INSERT INTO insurance_claim (amount, date, description, mainly_for, hospital) VALUES ({amount}, "{date}", "{descreption}", {C_id},{hospital} );''')
     else:
-        dep_id = db(f'''SELECT D_id FROM dependant WHERE (belongs_to = "{mainly_for}" AND `name` LIKE "%{dependent}%" )''')[0][0]
-        db(f'''INSERT INTO insurance_claim (amount, date, description, mainly_for, dependant, hospital) VALUES ({amount}, "{date}", "{descreption}", {C_id}, {dep_id}, {hospital_id} );''')
+        dep_id = db(f'''SELECT D_id FROM dependant WHERE (belongs_to = {C_id} AND `name` LIKE "%{dependent}%" )''')[0][0]
+        db(f'''INSERT INTO insurance_claim (amount, date, description, mainly_for, dependant, hospital) VALUES ({amount}, "{date}", "{descreption}", {C_id}, {dep_id}, {hospital} );''')
     return "successfuly"
 
 # list1 = [2000, "2021-12-23", "this is a description", "01234567820144",0, "Kenana"]
