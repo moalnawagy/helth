@@ -8,7 +8,7 @@ from mark_claim import mark_claim
 from get_customer_id import get_customer_id
 from file_claim import file_claim
 from payments import get_payments, verify_payment
-from core.db.db import db 
+from core.db.db import db
 myApp = Flask(__name__)
 
 @myApp.route("/")
@@ -24,10 +24,7 @@ def add_hospital():
 
 @myApp.route("/submit_add_new_hospital", methods = ['GET','POST'])
 def submit_add_new_hospital():
-    try:
-        dirt_list = [request.form.get('basic'), request.form.get('premium'), request.form.get('golden')]
-    except:
-        return render_template("failed.html", redirect = url_for('home'))
+    dirt_list = [request.form.get('basic'), request.form.get('premium'), request.form.get('golden')]
     clean_list = []
     for plane in dirt_list:
         if plane is not None:
@@ -45,11 +42,8 @@ def add_customer():
 
 @myApp.route("/submit_add_new_customer", methods = ['GET','POST'])
 def submit_add_new_customer():
-    try:
-        adding = add_new_customer_core(request.form['ssn'],request.form['name'], request.form['birth_date'], request.form.get('gender'),
-        request.form['income'], request.form['address'], request.form['phone'], request.form['has_chronic_dis'], request.form['tall'], request.form['weight'], request.form['email'], request.form.get('plane') )
-    except:
-        return render_template("failed.html", redirect = url_for('home'))
+    adding = add_new_customer_core(request.form['ssn'],request.form['name'], request.form['birth_date'], request.form.get('gender'),
+     request.form['income'], request.form['address'], request.form['phone'], request.form['has_chronic_dis'], request.form['tall'], request.form['weight'], request.form['email'], request.form.get('plane') )
     if(adding == "successfuly"):
         return render_template("successful.html", redirect = url_for('home'))
     else:
@@ -63,22 +57,15 @@ def file():
 
 @myApp.route("/submit_file_claim", methods = ['GET','POST'])
 def submit_file_claim():
-    try:
-        amount = request.form.get('amount')
-        date =request.form.get('date')
-        ssn = request.form.get('ssn')
-        description= request.form.get('description')
-        dependant = request.form.get('dependant')
-        hospital= request.form.get('hospital')
-    except:
-        return render_template("failed.html", redirect = url_for('home'))
-
+    amount = request.form.get('amount')
+    date =request.form.get('date')
+    ssn = request.form.get('ssn')
+    description= request.form.get('description')
+    dependant = request.form.get('dependant')
+    hospital= request.form.get('hospital')
 
     adding = file_claim([amount, date, description, ssn, dependant, hospital])
-    if(adding == "successfuly"):
-        return render_template("successful.html", redirect = url_for('home'))
-    else:
-        return render_template("failed.html", redirect = url_for('home'))
+    return render_template("successful.html", redirect = url_for('home'))
 
 @myApp.route("/add_depndant")
 def add_depndant():
@@ -86,14 +73,9 @@ def add_depndant():
 
 @myApp.route("/submit_add_new_dependent", methods = ['GET','POST'])
 def submit_add_new_dependent():
-    
-    try:
-        ssn = request.form['ssn']
-        id = get_customer_id(ssn)
-        data = [id,request.form['name'], request.form['birth_date'],request.form.get('plane')]
-    except:
-        return render_template("failed.html", redirect = url_for('home'))
-    adding = add_dependent_core(*data)
+    ssn = request.form['ssn']
+    id = get_customer_id(ssn)
+    adding = add_dependent_core(id,request.form['name'], request.form['birth_date'],request.form.get('plane'))
     if(adding == "successfuly"):
         return render_template("successful.html", redirect = url_for('home'))
     else:

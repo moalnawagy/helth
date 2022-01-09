@@ -4,15 +4,14 @@ name, birth_date, gender, income, address, phone, has_chronic_dis, tall, weight,
 {% block title %}Home{% endblock %}
 {% block content %}
 <div class="container">
-	<h1 align="center" style="font-family: fangsong; text-decoration: underline;color: olivedrab;"> Add New Customer</h1>
+	<h1 align="center"> Add New Hospital</h1>
 	<div class="form">
 		<form action="submit_add_new_customer" method="POST">
-
             <label for="ssn">customer ssn:</label><br>
-            <input type="text" name="ssn" pattern="[0-9]{14}"><br>
+            <input type="text" name="ssn"><br>
 
             <label for="name">customer name:</label><br>
-            <input type="text" name="name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)"><br>
+            <input type="text" name="name"><br>
 
             <label for="birth_date">birth_date:</label><br>
             <input type="date" name="birth_date"><br>
@@ -30,26 +29,26 @@ name, birth_date, gender, income, address, phone, has_chronic_dis, tall, weight,
             <input type="text" name="address"><br><br>
 
             <label for="phone">phone:</label><br>
-            <input type="number" name="phone" pattern="[0]{1}[1]{1}[0-2]{1}[0-9]{8}"><br><br>
+            <input type="number" name="phone"><br><br>
 
             <label for="">has chronic disease:</label><br>
 
-            <input type="radio" name="has_chronic_dis" id="True" value="True">
+            <input type="radio" name="has_chronic_dis" id="True" value=1>
             <label for="has_chronic_dis">true</label><br>
-            <input type="radio" name="has_chronic_dis" id="False" value="False">
+            <input type="radio" name="has_chronic_dis" id="False" value=0>
             <label for="False">False</label><br><br>
 
             <label for="tall">Tall:</label><br>
-            <input type="number" name="tall" min="54" max="272"><br><br>
+            <input type="number" name="tall"><br><br>
 
 
 
             <label for="weight">weight:</label><br>
-            <input type="number" name="weight" min="48" max="635"><br><br>
+            <input type="number" name="weight"><br><br>
             
 
             <label for="email">Email:</label><br>
-            <input type="email" name="email" placeholder="example@example.com"><br><br>
+            <input type="email" name="email"><br><br>
             
 
             <label for="plane">Plane:</label><br>
@@ -66,7 +65,6 @@ name, birth_date, gender, income, address, phone, has_chronic_dis, tall, weight,
         </form>
 	</div>
 </div>
-
 {% endblock %}
 
 {% block footer %}

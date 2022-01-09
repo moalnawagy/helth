@@ -1,28 +1,27 @@
 from mysql.connector import connect, Error
 
 
-
-def db(*sqlqueries):
-    myhost = 'localhost'
-    mydatabase = 'healthInsurance'
-    myuser = 'root'
-    mypass = 'Mayo@192771'
+def db(sqlquery):
+    myhost = 'db4free.net'
+    mydatabase = ' healthinsurance'
+    myuser = 'mohamedalnawagy'
+    mypass = 'e374baa6'
 
     con = connect(host = myhost,
                   database = mydatabase,
                   user = myuser,
                   password = mypass)
     cur = con.cursor()
+    cur.execute("USE healthinsurance;")
     try:
-        for query in sqlqueries:
-            cur.execute(query)
+        cur.execute(sqlquery)
     except Error as e:
         print("Eception", e)
-        return 'failed'
-    try:
-        records = cur.fetchall()
-    except:
-        records = 0
+    # try:
+    #     records = cur.fetchall()
+    # except:
+    #     records = 0
+    records = cur.fetchall()
     con.commit()
     con.close()
     return records
